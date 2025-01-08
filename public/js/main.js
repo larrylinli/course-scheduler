@@ -155,23 +155,17 @@ function toggleCourseSelection(course) {
     );
     
     if (index === -1) {
-        // 检查时间冲突但仍然允许选课
-        const conflicts = checkTimeConflict(course);
         selectedCourses.push(course);
         console.log('Course added to selection');
     } else {
         selectedCourses.splice(index, 1);
         console.log('Course removed from selection');
-        // 清除冲突信息
-        const conflictContainer = document.getElementById('conflictInfo');
-        if (conflictContainer) {
-            conflictContainer.style.display = 'none';
-        }
     }
     
     updateCalendarEvents();
     updateCourseList();
     updateStatistics();
+    checkAllConflicts(); // 更新冲突信息
 }
 
 // 更新统计信息
@@ -186,104 +180,101 @@ function updateStatistics() {
     document.getElementById('conflictCount').textContent = '0'; // 暂时设为0
 }
 
-// 检查时间冲突
-function checkTimeConflict(newCourse) {
-    // 合并现有课程
-    const mergedExistingCourses = mergeCoursesByLessonClass([...selectedCourses, ...scheduledCourses]);
-    
-    // 获取新课程的唯一会话（按日期）
-    const newSessions = new Map();
-    newCourse.sessions.forEach(session => {
-        if (!newSessions.has(session.date)) {
-            newSessions.set(session.date, session);
-        }
-    });
-
+// 检查所有课程冲突
+function checkAllConflicts() {
     const conflicts = [];
-    newSessions.forEach((newSession, date) => {
-        const newStart = new Date(`${date}T${newSession.startTime}`);
-        const newEnd = new Date(`${date}T${newSession.endTime}`);
+    const courses = [...selectedCourses, ...scheduledCourses];
+    
+    // 检查所有课程两两之间的冲突
+    for (let i = 0; i < courses.length; i++) {
+        for (let j = i + 1; j < courses.length; j++) {
+            const courseConflicts = findConflicts(courses[i], courses[j]);
+            if (courseConflicts.length > 0) {
+                conflicts.push({
+                    course1: courses[i],
+                    course2: courses[j],
+                    conflicts: courseConflicts,
+                    conflictRate: calculateConflictRate(courseConflicts.length, 
+                        Math.min(courses[i].sessions.length, courses[j].sessions.length))
+                });
+            }
+        }
+    }
+    
+    showAllConflicts(conflicts);
+    updateConflictCount(conflicts);
+}
 
-        mergedExistingCourses.forEach(existingCourse => {
-            if (existingCourse.lessonClassShortName === newCourse.lessonClassShortName) return;
-
-            existingCourse.sessions.forEach(existingSession => {
-                if (existingSession.date !== date) return;
-
-                const existingStart = new Date(`${existingSession.date}T${existingSession.startTime}`);
-                const existingEnd = new Date(`${existingSession.date}T${existingSession.endTime}`);
-
-                if (newStart < existingEnd && existingStart < newEnd) {
+// 查找两个课程之间的具体冲突
+function findConflicts(course1, course2) {
+    const conflicts = [];
+    
+    course1.sessions.forEach(session1 => {
+        course2.sessions.forEach(session2 => {
+            if (session1.date === session2.date) {
+                const start1 = new Date(`${session1.date}T${session1.startTime}`);
+                const end1 = new Date(`${session1.date}T${session1.endTime}`);
+                const start2 = new Date(`${session2.date}T${session2.startTime}`);
+                const end2 = new Date(`${session2.date}T${session2.endTime}`);
+                
+                if (start1 < end2 && start2 < end1) {
                     conflicts.push({
-                        date: existingSession.date,
-                        time: `${existingSession.startTime.substring(0,5)}-${existingSession.endTime.substring(0,5)}`,
-                        courseName: existingCourse.name,
-                        lessonClassShortName: existingCourse.lessonClassShortName,
-                        teacher: existingCourse.teacher,
-                        classroom: existingSession.classroom,
-                        type: existingCourse.courseType || '选修课'
+                        date: session1.date,
+                        time: `${session1.startTime.substring(0,5)}-${session1.endTime.substring(0,5)}`
                     });
                 }
-            });
+            }
         });
     });
-
-    if (conflicts.length > 0) {
-        showConflictInfo(newCourse, conflicts, newSessions.size);
-    }
-
+    
     return conflicts;
 }
 
-// 显示冲突信息
-function showConflictInfo(newCourse, conflicts, totalUniqueDates) {
-    // 计算冲突率：冲突的不重复日期数量 / 总的不重复日期数量
-    const uniqueConflictDates = new Set(conflicts.map(c => c.date));
-    const conflictRate = (uniqueConflictDates.size / totalUniqueDates * 100).toFixed(1);
-    
-    // 按日期分组冲突信息
-    const conflictsByDate = conflicts.reduce((acc, conflict) => {
-        if (!acc[conflict.date]) {
-            acc[conflict.date] = [];
-        }
-        acc[conflict.date].push(conflict);
-        return acc;
-    }, {});
+// 计算冲突率
+function calculateConflictRate(conflictsCount, totalSessions) {
+    return ((conflictsCount / totalSessions) * 100).toFixed(1);
+}
 
-    // 创建冲突信息的HTML
-    const conflictHTML = `
-        <div class="course-conflict">
-            <div class="conflict-header">
-                <span class="conflict-title">课程冲突</span>
-                <span class="conflict-rate">${conflictRate}%</span>
-            </div>
-            <div class="conflict-detail">
-                <div class="conflict-course-name">${newCourse.name}</div>
-                ${Object.entries(conflictsByDate).map(([date, dateConflicts]) => `
-                    <div class="conflict-date-group">
-                        <div class="conflict-date">${formatDate(date)}</div>
-                        ${dateConflicts.map(conflict => `
-                            <div class="conflict-time-item">
-                                <span class="conflict-time">${conflict.time}</span>
-                                <span class="conflict-with">与</span>
-                                <span class="conflict-course">${conflict.courseName}</span>
-                                <span class="conflict-type">(${conflict.type})</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-
-    // 显示冲突信息
+// 显示所有冲突信息
+function showAllConflicts(conflicts) {
     const conflictContainer = document.getElementById('conflictInfo');
-    if (conflictContainer) {
-        conflictContainer.innerHTML = conflictHTML;
-        conflictContainer.style.display = 'block';
-    } else {
-        console.error('Conflict container not found');
+    if (!conflictContainer) return;
+    
+    if (conflicts.length === 0) {
+        conflictContainer.style.display = 'none';
+        return;
     }
+    
+    let conflictHTML = '<div class="course-conflicts">';
+    
+    conflicts.forEach(conflict => {
+        conflictHTML += `
+            <div class="conflict-item">
+                <div class="conflict-header">
+                    <span class="conflict-courses">${conflict.course1.name} | ${conflict.course2.name}</span>
+                    <span class="conflict-rate">${conflict.conflictRate}%</span>
+                </div>
+                <div class="conflict-details">
+                    ${conflict.conflicts.map(c => `
+                        <div class="conflict-time-slot">
+                            ${formatDate(c.date)} ${c.time}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    conflictHTML += '</div>';
+    conflictContainer.innerHTML = conflictHTML;
+    conflictContainer.style.display = 'block';
+}
+
+// 更新冲突计数
+function updateConflictCount(conflicts) {
+    const totalConflicts = conflicts.reduce((sum, conflict) => 
+        sum + conflict.conflicts.length, 0);
+    document.getElementById('conflictCount').textContent = totalConflicts;
 }
 
 // 格式化日期显示

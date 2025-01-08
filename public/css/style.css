@@ -85,127 +85,49 @@
     margin-right: 4px;
 }
 
-.course-conflict {
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
+.course-conflicts {
+    padding: 10px;
+}
+
+.conflict-item {
+    background: #fff;
+    border: 1px solid #e8e8e8;
     border-radius: 4px;
-    border: 1px solid #f0f0f0;
+    margin-bottom: 8px;
+    padding: 12px;
 }
 
 .conflict-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.conflict-title {
-    color: #666;
-    font-size: 14px;
+.conflict-courses {
+    font-weight: 500;
+    color: #333;
 }
 
 .conflict-rate {
-    color: #f5222d;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.conflict-detail {
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-.conflict-course-name {
-    color: #333;
+    color: #ff4d4f;
     font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.conflict-date-group {
-    margin-bottom: 8px;
-}
-
-.conflict-date {
-    color: #666;
-    margin-bottom: 4px;
-}
-
-.conflict-time-item {
-    padding-left: 12px;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.conflict-time {
-    color: #1890ff;
-}
-
-.conflict-with {
-    color: #999;
-}
-
-.conflict-course {
-    color: #333;
-}
-
-.conflict-type {
-    color: #666;
-}
-
-.conflict-list {
-    margin: 15px 0;
-}
-
-.conflict-item {
-    background-color: #fff;
-    border: 1px solid #ffd97d;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 8px;
-}
-
-.conflict-course {
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.conflict-course-name {
-    font-weight: 600;
-    color: #495057;
-}
-
-.conflict-course-type {
-    font-size: 0.9rem;
-    color: #6c757d;
-    background-color: #e9ecef;
-    padding: 2px 8px;
-    border-radius: 4px;
 }
 
 .conflict-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 0.9rem;
-    color: #6c757d;
+    font-size: 0.9em;
+    color: #666;
 }
 
-.conflict-details span {
-    background-color: #f8f9fa;
-    padding: 3px 8px;
-    border-radius: 4px;
+.conflict-time-slot {
+    padding: 4px 0;
+    border-bottom: 1px dashed #f0f0f0;
 }
 
-.conflict-note {
-    color: #856404;
-    font-size: 0.9rem;
-    margin-top: 10px;
-    text-align: center;
+.conflict-time-slot:last-child {
+    border-bottom: none;
 }
 
 #calendar {
