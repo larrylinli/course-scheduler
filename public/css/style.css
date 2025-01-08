@@ -1,0 +1,50 @@
+.course-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.course-item {
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.course-item:hover {
+    background-color: #f8f9fa;
+}
+
+.course-item.selected {
+    background-color: #e2f0ff;
+    border-color: #0d6efd;
+}
+
+.conflict-alert {
+    background-color: #ffe6e6;
+    border-color: #ff8080;
+}
+
+#calendar {
+    height: 800px;
+}
+
+.fc-event {
+    cursor: pointer;
+}
+
+.conflict-info {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+}
+
+.conflict-rate {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 10px;
+}
