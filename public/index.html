@@ -50,16 +50,6 @@
                     </div>
                 </div>
 
-                <!-- 课程冲突信息 -->
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h5 class="mb-0">冲突检测</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="conflictInfo"></div>
-                    </div>
-                </div>
-
                 <!-- 可选课程列表 -->
                 <div class="card">
                     <div class="card-header">
@@ -74,6 +64,16 @@
             <!-- 右侧日历 -->
             <div class="col-md-9">
                 <div id="calendar"></div>
+                
+                <!-- 冲突检测 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">冲突检测</h5>
+                    </div>
+                    <div class="card-body conflict-container">
+                        <div id="conflictInfo" class="conflict-grid"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
