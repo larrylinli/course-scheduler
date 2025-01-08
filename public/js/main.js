@@ -122,10 +122,8 @@ function updateCourseList() {
         const courseElement = document.createElement('div');
         courseElement.className = `course-item ${isSelected ? 'selected' : ''}`;
         
-        // 压缩显示的时间信息
-        const timeInfo = course.sessions ? course.sessions.map(session => 
-            `${session.date.split('-')[2]}日 ${session.startTime.substring(0, 5)}`
-        ).join(', ') : '';
+        // 获取课程节数
+        const sessionCount = course.sessions ? course.sessions.length : 0;
         
         // 完整的时间信息（用于悬停显示）
         const fullTimeInfo = course.sessions ? course.sessions.map(session =>
@@ -134,11 +132,21 @@ function updateCourseList() {
 
         courseElement.innerHTML = `
             <div class="course-header">
-                <span class="course-name">${course.name}${course.hasIclass ? ' 🌐' : ''}</span>
+                <div class="course-title">
+                    <span class="course-name">${course.name}</span>
+                    <span class="course-code">${course.lessonClassShortName}</span>
+                    ${course.classMode === '4' ? '<span class="iclass-icon">🌐</span>' : ''}
+                </div>
+                <div class="course-teacher">${course.teacher || ''}</div>
             </div>
             <div class="course-info">
-                <span class="course-teacher">${course.teacher || ''}</span>
-                <span class="course-time" title="${fullTimeInfo}">${timeInfo}</span>
+                <div class="course-meta">
+                    <span class="course-credits">${course.credits}学分/${course.totalHour}学时</span>
+                    <span class="course-sessions" title="${fullTimeInfo}">${sessionCount}次课</span>
+                </div>
+                <div class="course-actions">
+                    <button class="select-btn ${isSelected ? 'selected' : ''}">${isSelected ? '退选' : '选课'}</button>
+                </div>
             </div>
         `;
 
