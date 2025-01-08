@@ -16,7 +16,7 @@ let preScheduledCourses = [];
 // 读取预加载的课程数据
 function loadInitialCourses() {
     try {
-        const csvPath = path.join(__dirname, '课程信息.csv');
+        const csvPath = path.join(__dirname, '课程信息v3.csv');
         console.log('Loading courses from:', csvPath);
         
         if (!fs.existsSync(csvPath)) {
@@ -50,7 +50,7 @@ function loadInitialCourses() {
             }
 
             // 跳过空记录
-            if (!record.courseCode || !record.courseName || !record.courseType) {
+            if (!record.courseCode || !record.courseName || !record.lessonClassShortName) {
                 console.log('Skipping empty record:', record);
                 return;
             }
@@ -69,7 +69,7 @@ function loadInitialCourses() {
                 return;
             }
 
-            const courseKey = `${record.courseCode}_${record.courseType}`;
+            const courseKey = record.lessonClassShortName;
             if (!courseGroups[courseKey]) {
                 courseGroups[courseKey] = {
                     code: record.courseCode,
@@ -82,6 +82,7 @@ function loadInitialCourses() {
                     language: record.language || '中文',
                     maxStudents: record.maxNum === '非选课' ? 0 : (parseInt(record.maxNum) || 0),
                     classMode: record.iClassMode || '',
+                    lessonClassShortName: record.lessonClassShortName,
                     sessions: []
                 };
             }
@@ -99,20 +100,18 @@ function loadInitialCourses() {
         
         // 将分组后的课程添加到相应列表
         Object.values(courseGroups).forEach(course => {
-            // 确保课程有时间安排
-            if (course.sessions.length === 0) {
-                console.log(`Skipping course without sessions: ${course.name}`);
-                return;
-            }
-
+            // 根据courseType分类课程
             if (course.courseType === '已排课') {
                 preScheduledCourses.push(course);
             } else if (course.courseType === '春选课') {
                 preloadedCourses.push(course);
             }
         });
-        
-        console.log(`Loaded ${preloadedCourses.length} elective courses and ${preScheduledCourses.length} pre-scheduled courses`);
+
+        console.log('Loaded courses:', {
+            elective: preloadedCourses.length,
+            scheduled: preScheduledCourses.length
+        });
         
         // 输出示例数据以供调试
         if (preScheduledCourses.length > 0) {
