@@ -1,50 +1,148 @@
 .course-list {
     max-height: 500px;
     overflow-y: auto;
+    padding: 10px;
 }
 
 .course-item {
-    padding: 10px;
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    background-color: #fff;
 }
 
 .course-item:hover {
-    background-color: #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
 }
 
 .course-item.selected {
-    background-color: #e2f0ff;
-    border-color: #0d6efd;
+    background-color: #e7f5ff;
+    border-color: #4dabf7;
 }
 
-.conflict-alert {
-    background-color: #ffe6e6;
-    border-color: #ff8080;
+.course-item h5 {
+    margin: 0 0 10px 0;
+    color: #343a40;
+    font-size: 1.1rem;
+}
+
+.course-item p {
+    margin: 5px 0;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.course-item ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 10px 0;
+}
+
+.course-item li {
+    background-color: #f8f9fa;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.course-stats {
+    padding: 10px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.stat-label {
+    color: #495057;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #0d6efd;
+}
+
+.stat-value span {
+    margin-right: 4px;
+}
+
+.conflict-info {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+}
+
+.conflict-rate {
+    font-weight: bold;
+    color: #dc3545;
+    margin-bottom: 10px;
 }
 
 #calendar {
     height: 800px;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
 }
 
 .fc-event {
     cursor: pointer;
-}
-
-.conflict-info {
-    padding: 8px;
-    margin-bottom: 8px;
+    margin: 2px 0;
     border-radius: 4px;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
+    padding: 2px;
 }
 
-.conflict-rate {
-    font-size: 1.2em;
+.fc-event-title {
+    font-size: 0.9em;
+    white-space: pre-line;
+    padding: 2px;
+}
+
+/* 导航栏样式 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #dc3545;
-    margin-bottom: 10px;
+}
+
+/* 卡片样式 */
+.card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 12px 15px;
+}
+
+.card-header h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.card-body {
+    padding: 15px;
 }

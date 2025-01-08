@@ -1,0 +1,41 @@
+lessonDate,sectionBeginTime,sectionEndTime,courseName,courseCode,courseShortName,courseNameEn,facultyName,lessonClassShortName,classRoomName,courseType,totalCredit,totalHour,maxNum,language,iClassMode
+2025-2-17,18:30:00,22:00:00,商业研究中的计量方法,ECON8711,EMBR,Econometrics Methods in Business Research,李楠,EMBR(1),304,春选课,1,12,70,中文,4
+2025-2-18,18:30:00,22:00:00,财务分析实务,ECON8754,FAP,Financial Analysis Practice,饶钢,FAP,304,春选课,1,12,35,中文,4
+2025-3-13,18:30:00,22:00:00,企业资本战略实践,ECON8753,CCSP,Corporate Capital Strategy Practice,谢晖,CCSP,304,春选课,1,12,70,中文,1
+2025-3-15,9:00:00,12:30:00,公司金融,ECON8615,CF,Corporate Finance,汪勇祥,CF(E),305,已排课,2,24,非选课,中文,1
+2025-3-15,14:00:00,17:30:00,公司金融,ECON8615,CF,Corporate Finance,汪勇祥,CF(E),305,已排课,2,24,非选课,中文,1
+2025-3-16,9:00:00,12:30:00,英语沟通,ECON8703,CMC,Communication,陈幼平,CMC(E),305,已排课,1,12,非选课,英文,1
+2025-3-16,13:30:00,17:00:00,英语沟通,ECON8703,CMC,Communication,陈幼平,CMC(E),305,已排课,1,12,非选课,英文,1
+2025-3-31,18:30:00,22:00:00,金融科技：原理与方法,ECON8730,FPM,FinTech: Principles and Methodologies,胡捷,FPM(1)iclass,online,春选课,2,24,70,中文,1
+2025-4-1,18:30:00,22:00:00,Python及其在金融中的应用,ECON8712,PYTH,Python and Applications in Finance,阚睿,PYTH(1),403,春选课,2,24,70,中文,1
+2025-4-1,18:30:00,22:00:00,衍生证券,ECON6612,DS,Derivative Securities,巨能久,DS(1),305,春选课,2,24,70,中文,1
+2025-4-1,18:30:00,22:00:00,金融科技：原理与方法,ECON8730,FPM,FinTech: Principles and Methodologies,胡捷,FPM(1),304,春选课,2,24,70,中文,1
+2025-4-1,18:30:00,22:00:00,金融科技：原理与方法,ECON8730,FPM,FinTech: Principles and Methodologies,胡捷,FPM(1)iclass,online,春选课,2,24,70,中文,1
+2025-4-17,18:30:00,22:00:00,宏观经济分析实务,ECON8742,PMA,Practical Macroeconomic Analysis,王红林,PMA(1),304,春选课,1,12,70,中文,4
+2025-4-17,18:30:00,22:00:00,宏观经济分析实务,ECON8742,PMA,Practical Macroeconomic Analysis,王红林,PMA(1)iclass,online,春选课,1,12,70,中文,4
+2025-4-19,9:00:00,12:30:00,金融市场,ECON8644,FMar,Financial Markets,魏力,FMar(E),305,已排课,2,24,非选课,中文,1
+2025-4-19,13:30:00,17:00:00,金融市场,ECON8644,FMar,Financial Markets,魏力,FMar(E),305,已排课,2,24,非选课,中文,1
+2025-4-20,9:00:00,12:30:00,宏观经济学,ECON6622,Macro,Macroeconomics,董兵兵,Macro(E),305,已排课,2,24,非选课,中文,1
+2025-5-11,9:00:00,12:30:00,宏观经济学,ECON6622,Macro,Macroeconomics,董兵兵,Macro(E),305,已排课,2,24,非选课,中文,1
+2025-5-11,13:30:00,17:00:00,宏观经济学,ECON6622,Macro,Macroeconomics,董兵兵,Macro(E),305,已排课,2,24,非选课,中文,1
+2025-5-12,18:30:00,22:00:00,金融科技与现代支付发展,ECON8709,FMP,Fintech and Modern Payment,马颖,FMP(1),305,春选课,1,12,70,中文,1
+2025-5-12,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1),203,春选课,2,24,70,中文,1
+2025-5-12,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1)iclass,online,春选课,2,24,70,中文,1
+2025-5-20,18:30:00,22:00:00,区块链与数字金融,ECON8692,BDF,Blockchain and Digital Finance,胡捷,BDF(1)iclass,online,春选课,2,24,70,中文,1
+2025-5-21,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1),203,春选课,2,24,70,中文,1
+2025-5-21,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1)iclass,online,春选课,2,24,70,中文,1
+2025-5-21,18:30:00,22:00:00,量化投资实践,ECON8700,QIP,Quantitative Investment in Practice,阚睿,QIP(1),305,春选课,2,24,70,中文,1
+2025-5-22,18:30:00,22:00:00,行为金融学,ECON8618,BF,Behavioral Finance,阎志鹏,BF(1),304,春选课,2,24,70,英文,1
+2025-6-4,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1),304,春选课,2,24,70,中文,1
+2025-6-4,18:30:00,22:00:00,金融体系与机构,ECON8729,FSI,Financial System and Institutions,胡捷,FSI(1)iclass,online,春选课,2,24,70,中文,1
+2025-6-4,18:30:00,22:00:00,量化投资实践,ECON8700,QIP,Quantitative Investment in Practice,阚睿,QIP(1),305,春选课,2,24,70,中文,1
+2025-6-5,18:30:00,22:00:00,行为金融学,ECON8618,BF,Behavioral Finance,阎志鹏,BF(1),304,春选课,2,24,70,英文,1
+2025-6-5,18:30:00,22:00:00,区块链与数字金融,ECON8692,BDF,Blockchain and Digital Finance,胡捷,BDF(1),904,春选课,2,24,70,中文,1
+2025-6-24,18:30:00,22:00:00,国际金融,ECON8674,IF,International Finance,阎志鹏,IF(1),304,春选课,2,24,70,英文,1
+2025-6-25,18:30:00,22:00:00,宏观调控转型,ECON8755,MPT,Macro Policy Transformation,董兵兵,MPT,403,春选课,1,12,70,中文,1
+2025-6-25,18:30:00,22:00:00,证券化与房地产金融,ECON8634,SREF,Securitization and Real Estate Finance,刘鹏,SREF(1)iclass,online,春选课,2,24,70,中文,1
+2025-6-25,18:30:00,22:00:00,证券化与房地产金融,ECON8634,SREF,Securitization and Real Estate Finance,刘鹏,SREF(1),203,春选课,2,24,70,中文,1
+2025-6-25,18:30:00,22:00:00,量化投资实践,ECON8700,QIP,Quantitative Investment in Practice,阚睿,QIP(1),305,春选课,2,24,70,中文,1
+2025-7-29,18:30:00,22:00:00,数据要素、数据产品与数据资产,ECON8752,DDD,"Data Factors, Data Products, and Data Assets",张舸,DDD,203,春选课,1,12,70,中文,1
+2025-7-30,18:30:00,22:00:00,创业金融实践,ECON8736,EFP,Entrepreneurial Finance in Practice,谢晖,EFP(1),203,春选课,1,12,70,中文,1
+2025-7-31,18:30:00,22:00:00,数据要素、数据产品与数据资产,ECON8752,DDD,"Data Factors, Data Products, and Data Assets",张舸,DDD,203,春选课,1,12,70,中文,1
