@@ -137,7 +137,10 @@ function updateCourseList() {
                     <span class="course-code">${course.lessonClassShortName}</span>
                     ${course.classMode === '4' ? '<span class="iclass-icon">🌐</span>' : ''}
                 </div>
-                <div class="course-teacher">${course.teacher || ''}</div>
+                <div class="d-flex align-items-center">
+                    <div class="course-teacher me-2">${course.teacher || ''}</div>
+                    <div class="course-language text-muted small">（${course.language || '未指定'}）</div>
+                </div>
             </div>
             <div class="course-info">
                 <div class="course-meta">
@@ -178,14 +181,42 @@ function toggleCourseSelection(course) {
 
 // 更新统计信息
 function updateStatistics() {
-    const selectedCount = selectedCourses.length;
-    const totalCredits = selectedCourses.reduce((sum, course) => sum + (course.credits || 0), 0);
-    const totalHours = selectedCourses.reduce((sum, course) => sum + (course.totalHour || 0), 0);
-    
-    document.getElementById('selectedCourseCount').textContent = selectedCount;
-    document.getElementById('totalCredits').textContent = totalCredits;
-    document.getElementById('totalHours').textContent = totalHours;
-    document.getElementById('conflictCount').textContent = '0'; // 暂时设为0
+    // 初始化统计数据
+    const stats = {
+        selectedCount: selectedCourses.length,
+        credits: 0,
+        hours: 0,
+        conflicts: calculateTotalConflicts()
+    };
+
+    // 计算已选课程的统计
+    selectedCourses.forEach(course => {
+        stats.credits += parseFloat(course.credits) || 0;
+        stats.hours += parseInt(course.totalHour) || 0;
+    });
+
+    // 统计已排课程（根据courseType）
+    const scheduledCoursesMap = new Map();
+    scheduledCourses.forEach(course => {
+        if (course.courseType === '已排课' && course.lessonClassShortName) {
+            scheduledCoursesMap.set(course.lessonClassShortName, course);
+        }
+    });
+
+    // 添加已排课程的统计
+    scheduledCoursesMap.forEach(course => {
+        stats.credits += parseFloat(course.credits) || 0;
+        stats.hours += parseInt(course.totalHour) || 0;
+    });
+
+    // 更新总课程数
+    stats.selectedCount += scheduledCoursesMap.size;
+
+    // 更新显示
+    document.getElementById('selectedCourseCount').textContent = stats.selectedCount ;
+    document.getElementById('totalCredits').textContent = stats.credits.toFixed(1) ;
+    document.getElementById('totalHours').textContent = stats.hours ;
+    document.getElementById('conflictCount').textContent = stats.conflicts ;
 }
 
 // 检查所有课程冲突
@@ -292,6 +323,30 @@ function formatDate(dateStr) {
     const day = date.getDate();
     const weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()];
     return `${month}月${day}日 ${weekday}`;
+}
+
+// 计算总冲突数
+function calculateTotalConflicts() {
+    const conflicts = [];
+    const courses = [...selectedCourses, ...scheduledCourses];
+    
+    // 检查所有课程两两之间的冲突
+    for (let i = 0; i < courses.length; i++) {
+        for (let j = i + 1; j < courses.length; j++) {
+            const courseConflicts = findConflicts(courses[i], courses[j]);
+            if (courseConflicts.length > 0) {
+                conflicts.push({
+                    course1: courses[i],
+                    course2: courses[j],
+                    conflicts: courseConflicts,
+                    conflictRate: calculateConflictRate(courseConflicts.length, 
+                        Math.min(courses[i].sessions.length, courses[j].sessions.length))
+                });
+            }
+        }
+    }
+    
+    return conflicts.reduce((sum, conflict) => sum + conflict.conflicts.length, 0);
 }
 
 // 更新日历事件
