@@ -384,8 +384,71 @@ function updateCalendarEvents() {
     calendar.addEventSource({events});
 }
 
+// 加载课程数据
+async function loadCourseData() {
+    try {
+        const response = await fetch('/course_data.csv');
+        const csvText = await response.text();
+        const rows = csvText.split('\n').slice(1); // 跳过标题行
+        const courseDataBody = document.getElementById('courseDataBody');
+        courseDataBody.innerHTML = ''; // 清空现有内容
+
+        rows.forEach(row => {
+            if (row.trim() === '') return; // 跳过空行
+            
+            // 使用正则表达式来正确分割CSV数据
+            const matches = row.match(/(?:^|,)("(?:[^"]*(?:""[^"]*)*)"|\s*[^,]*)/g);
+            if (!matches) return;
+            
+            const values = matches.map(match => {
+                // 移除开头的逗号（如果有）
+                match = match.startsWith(',') ? match.slice(1) : match;
+                // 处理带引号的值
+                if (match.startsWith('"') && match.endsWith('"')) {
+                    match = match.slice(1, -1).replace(/""/g, '"');
+                }
+                return match.trim();
+            });
+
+            const [
+                courseCode,
+                courseName,
+                courseShortName,
+                courseNameEn,
+                lessonTaskTeam,
+                lessonClassShortName,
+                iClassMode,
+                language,
+                maxNum,
+                studentNum,
+                totalCredit
+            ] = values;
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${courseCode || ''}</td>
+                <td>${courseName || ''}</td>
+                <td>${courseShortName || ''}</td>
+                <td>${courseNameEn || ''}</td>
+                <td>${lessonTaskTeam || ''}</td>
+                <td>${lessonClassShortName || ''}</td>
+                <td style="display: none;">${iClassMode || ''}</td>
+                <td>${language || ''}</td>
+                <td>${maxNum || '0'}</td>
+                <td>${studentNum || '0'}</td>
+                <td>${totalCredit || ''}</td>
+            `;
+            courseDataBody.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('加载课程数据失败:', error);
+        console.error('错误详情:', error.message);
+    }
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     initCalendar();
     loadCourses();
+    loadCourseData(); // 加载课程数据
 });

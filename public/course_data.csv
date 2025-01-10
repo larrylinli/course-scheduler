@@ -1,0 +1,36 @@
+courseCode,courseName,courseShortName,courseNameEn,lessonTaskTeam,lessonClassShortName,iClassMode,language,maxNum,studentNum,totalCredit
+ECON6612,衍生证券,DS,Derivative Securities,巨能久,DS(1),1,zh_CN,70,10,2
+ECON8623,商业银行管理,CB,Commercial Banking,"李楠,杨蕾",CB(1),1,en_US,70,23,2
+ECON8623,商业银行管理,CB,Commercial Banking,"李楠,杨蕾",CB(1)iclass,4,en_US,70,24,2
+ECON8618,行为金融学,BF,Behavioral Finance,阎志鹏,BF(1),1,en_US,70,44,2
+ECON8634,证券化与房地产金融,SREF,Securitization and Real Estate Finance,"刘鹏,胡侗",SREF(1),1,zh_CN,70,7,2
+ECON8634,证券化与房地产金融,SREF,Securitization and Real Estate Finance,"刘鹏,胡侗",SREF(1)iclass,4,zh_CN,35,42,2
+ECON8674,国际金融,IF,International Finance,阎志鹏,IF(1),1,en_US,70,24,2
+ECON8634,证券化与房地产金融,SREF,Securitization and Real Estate Finance,"刘鹏,胡侗",SREF(2),1,en_US,70,29,2
+ECON8675,管理会计,MAC,Managerial Accounting,"程仕军,胡侗",MAC(1)iclass,4,zh_CN,35,39,2
+ECON8677,资产管理实践,AMP,Asset Management in Practice,"BURIK, Paul",AMP(1),1,en_US,35,8,2
+ECON8675,管理会计,MAC,Managerial Accounting,"程仕军,胡侗",MAC(1),1,zh_CN,70,16,2
+ECON8692,区块链与数字金融,BDF,Blockchain and Digital Finance,胡捷,BDF(1),1,zh_CN,70,58,2
+ECON8700,量化投资实践,QIP,Quantitative Investment in Practice,"阚睿,曾凡宸",QIP(1),1,zh_CN,70,19,2
+ECON8711,商业研究中的计量方法,EMBR,Econometrics Methods in Business Research,"李楠,张瑞雅",EMBR(1),1,zh_CN,70,13,1
+ECON8709,金融科技与现代支付发展,FMP,Fintech and Modern Payment,"马颖,朱书慧",FMP(1),1,zh_CN,70,4,1
+ECON8692,区块链与数字金融,BDF,Blockchain and Digital Finance,胡捷,BDF(1)iclass,4,zh_CN,70,78,2
+ECON8712,Python及其在金融中的应用,PYTH,Python and Applications in Finance,"阚睿,符朕皓",PYTH(1),1,zh_CN,70,60,2
+ECON8711,商业研究中的计量方法,EMBR,Econometrics Methods in Business Research,"李楠,张瑞雅",EMBR(2),1,zh_CN,70,10,1
+ECON8711,商业研究中的计量方法,EMBR,Econometrics Methods in Business Research,"李楠,张瑞雅",EMBR(2)iclass,4,zh_CN,70,37,1
+ECON8729,金融体系与机构,FSI,Financial System and Institutions,胡捷,FSI(1),1,zh_CN,70,48,2
+ECON8730,金融科技：原理与方法,FPM,FinTech: Principles and Methodologies,胡捷,FPM(1),1,zh_CN,70,31,2
+ECON8733,商业分析：数据驱动策略,BADDS,Business Analytics: Data-Driven Strategy,徐琳莉,BADDS,1,zh_CN,70,40,1
+ECON8735,中国商业银行经营管理实践,CCBMP,Chinese Commercial Bank Management Practices,刘晓春,CCBMP,1,zh_CN,70,15,1
+ECON8730,金融科技：原理与方法,FPM,FinTech: Principles and Methodologies,胡捷,FPM(1)iclass,4,zh_CN,70,80,2
+ECON8729,金融体系与机构,FSI,Financial System and Institutions,胡捷,FSI(1)iclass,4,zh_CN,70,77,2
+ECON8735,中国商业银行经营管理实践,CCBMP,Chinese Commercial Bank Management Practices,刘晓春,CCBMP iclass,4,zh_CN,70,34,1
+ECON8738,数学在金融中的应用,MIF,Mathematics in Finance,"阚睿,符朕皓",MIF,1,zh_CN,70,35,2
+ECON8742,宏观经济分析实务,PMA,Practical Macroeconomic Analysis,王红林,PMA(1),1,zh_CN,70,36,1
+ECON8736,创业金融实践,EFP,Entrepreneurial Finance in Practice,谢晖,EFP(1),1,zh_CN,70,57,1
+ECON8742,宏观经济分析实务,PMA,Practical Macroeconomic Analysis,王红林,PMA(1)iclass,4,zh_CN,70,75,1
+ECON8752,数据要素、数据产品与数据资产,DDD,"Data Factors, Data Products, and Data Assets","张春,张舸,朱宏晖",DDD,1,zh_CN,70,41,1
+ECON8753,企业资本战略实践,CCSP,Corporate Capital Strategy Practice,谢晖,CCSP,1,zh_CN,70,81,1
+ECON8754,财务分析实务,FAP,Financial Analysis Practice,饶钢,FAP,1,zh_CN,70,67,1
+ECON8754,财务分析实务,FAP,Financial Analysis Practice,饶钢,FAP iclass,4,zh_CN,35,73,1
+ECON8755,宏观调控转型,MPT,Macro Policy Transformation,"张春,董兵兵,吕先颖",MPT,1,zh_CN,70,70,1
