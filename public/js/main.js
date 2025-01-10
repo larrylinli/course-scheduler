@@ -4,6 +4,9 @@ let preloadedCourses = [];
 let selectedCourses = [];
 let scheduledCourses = [];
 
+// 添加显示模式状态
+let showAllCourses = true;
+
 // 初始化日历
 function initCalendar() {
     const calendarEl = document.getElementById('calendar');
@@ -46,17 +49,17 @@ function mergeCoursesByLessonClass(courses) {
         // 跳过没有lessonClassShortName的课程
         if (!course || !course.lessonClassShortName) return;
         
-        // 跳过包含iclass的课程
-        if (course.lessonClassShortName.toLowerCase().includes('iclass')) return;
-        
-        const key = course.lessonClassShortName;
+        // 获取基础课程代码（移除iclass后缀）
+        const baseKey = course.lessonClassShortName.replace('iclass', '');
+        const key = course.isOnline ? `${baseKey}iclass` : baseKey;
         
         if (!mergedMap.has(key)) {
             // 创建新的合并课程对象
             mergedMap.set(key, {
                 ...course,
                 sessions: [...(course.sessions || [])],
-                hasIclass: course.iclassMode ? true : false
+                hasIclass: course.iclassMode ? true : false,
+                isOnline: course.isOnline || false
             });
         } else {
             // 更新现有课程
@@ -115,9 +118,12 @@ function updateCourseList() {
 
     courseListElement.innerHTML = '';
     mergedCourses.forEach(course => {
-        const isSelected = selectedCourses.some(selected => 
-            selected.lessonClassShortName === course.lessonClassShortName
+        // 检查当前课程的选中状态和模式
+        const selectedCourse = selectedCourses.find(selected => 
+            selected.lessonClassShortName.replace('iclass', '') === course.lessonClassShortName
         );
+        const isSelected = !!selectedCourse;
+        const isOnlineSelected = selectedCourse?.isOnline;
         
         const courseElement = document.createElement('div');
         courseElement.className = `course-item ${isSelected ? 'selected' : ''}`;
@@ -130,6 +136,9 @@ function updateCourseList() {
             `${session.date} ${session.startTime.substring(0, 5)}-${session.endTime.substring(0, 5)} ${session.classroom}`
         ).join('\n') : '';
 
+        // 判断是否是iclass课程（mode=4）
+        const isIclassCourse = course.classMode === '4';
+        
         courseElement.innerHTML = `
             <div class="course-header">
                 <div class="course-title">
@@ -148,25 +157,53 @@ function updateCourseList() {
                     <span class="course-sessions" title="${fullTimeInfo}">${sessionCount}次课</span>
                 </div>
                 <div class="course-actions">
-                    <button class="select-btn ${isSelected ? 'selected' : ''}">${isSelected ? '退选' : '选课'}</button>
+                    ${isIclassCourse ? `
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button class="btn ${isSelected && !isOnlineSelected ? 'btn-primary' : 'btn-outline-primary'} select-offline-btn">线下</button>
+                            <button class="btn ${isSelected && isOnlineSelected ? 'btn-primary' : 'btn-outline-primary'} select-online-btn">线上</button>
+                        </div>
+                    ` : `
+                        <button class="select-btn ${isSelected ? 'selected' : ''}">${isSelected ? '退选' : '选课'}</button>
+                    `}
                 </div>
             </div>
         `;
 
-        courseElement.addEventListener('click', () => toggleCourseSelection(course));
+        // 添加事件监听
+        if (isIclassCourse) {
+            const offlineBtn = courseElement.querySelector('.select-offline-btn');
+            const onlineBtn = courseElement.querySelector('.select-online-btn');
+            
+            offlineBtn.addEventListener('click', () => toggleCourseSelection(course, false));
+            onlineBtn.addEventListener('click', () => toggleCourseSelection(course, true));
+        } else {
+            courseElement.addEventListener('click', () => toggleCourseSelection(course, false));
+        }
+
         courseListElement.appendChild(courseElement);
     });
 }
 
-// 切换课程选择状态
-function toggleCourseSelection(course) {
-    console.log('Toggling course selection:', course);
+// 修改选课切换函数以支持在线模式
+function toggleCourseSelection(course, isOnline = false) {
+    console.log('Toggling course selection:', course, 'isOnline:', isOnline);
+    
+    // 创建课程副本，添加在线标记
+    const courseWithMode = {
+        ...course,
+        isOnline: isOnline,
+        // 如果是在线模式，修改lessonClassShortName
+        lessonClassShortName: isOnline ? `${course.lessonClassShortName}iclass` : course.lessonClassShortName
+    };
+    
+    // 查找现有选课（同时考虑线上和线下版本）
+    const baseCode = course.lessonClassShortName.replace('iclass', '');
     const index = selectedCourses.findIndex(selected => 
-        selected.lessonClassShortName === course.lessonClassShortName
+        selected.lessonClassShortName.replace('iclass', '') === baseCode
     );
     
     if (index === -1) {
-        selectedCourses.push(course);
+        selectedCourses.push(courseWithMode);
         console.log('Course added to selection');
     } else {
         selectedCourses.splice(index, 1);
@@ -176,7 +213,8 @@ function toggleCourseSelection(course) {
     updateCalendarEvents();
     updateCourseList();
     updateStatistics();
-    checkAllConflicts(); // 更新冲突信息
+    checkAllConflicts();
+    loadCourseData();
 }
 
 // 更新统计信息
@@ -364,17 +402,22 @@ function updateCalendarEvents() {
         course.sessions.forEach(session => {
             if (!session.date || !session.startTime || !session.endTime) return;
             
+            // 为在线课程添加特殊标记
+            const isOnlineCourse = course.isOnline;
+            const courseTitle = `${course.name}${isOnlineCourse ? ' (在线)' : ''}${course.hasIclass ? ' 🌐' : ''}`;
+            
             events.push({
-                title: `${course.name}${course.hasIclass ? ' 🌐' : ''}`,
+                title: courseTitle,
                 start: `${session.date}T${session.startTime}`,
                 end: `${session.date}T${session.endTime}`,
-                backgroundColor: course.courseType === '已排课' ? '#6c757d' : '#1890ff',
-                borderColor: course.courseType === '已排课' ? '#6c757d' : '#1890ff',
+                backgroundColor: isOnlineCourse ? '#4CAF50' : (course.courseType === '已排课' ? '#6c757d' : '#1890ff'),
+                borderColor: isOnlineCourse ? '#4CAF50' : (course.courseType === '已排课' ? '#6c757d' : '#1890ff'),
                 extendedProps: {
                     lessonClassShortName: course.lessonClassShortName,
                     teacher: course.teacher,
-                    classroom: session.classroom,
-                    hasIclass: course.hasIclass
+                    classroom: isOnlineCourse ? '线上' : session.classroom,
+                    hasIclass: course.hasIclass,
+                    isOnline: isOnlineCourse
                 }
             });
         });
@@ -390,79 +433,125 @@ async function loadCourseData() {
         const response = await fetch('/course_data.csv');
         const csvText = await response.text();
         const rows = csvText.split('\n').slice(1); // 跳过标题行
-        const courseDataBody = document.getElementById('courseDataBody');
-        courseDataBody.innerHTML = ''; // 清空现有内容
-
-        rows.forEach(row => {
-            if (row.trim() === '') return; // 跳过空行
-            
-            // 使用正则表达式来正确分割CSV数据
-            const matches = row.match(/(?:^|,)("(?:[^"]*(?:""[^"]*)*)"|\s*[^,]*)/g);
-            if (!matches) return;
-            
-            const values = matches.map(match => {
-                // 移除开头的逗号（如果有）
-                match = match.startsWith(',') ? match.slice(1) : match;
-                // 处理带引号的值
-                if (match.startsWith('"') && match.endsWith('"')) {
-                    match = match.slice(1, -1).replace(/""/g, '"');
-                }
-                return match.trim();
-            });
-
-            const [
-                courseCode,
-                courseName,
-                courseShortName,
-                courseNameEn,
-                lessonTaskTeam,
-                lessonClassShortName,
-                iClassMode,
-                language,
-                maxNum,
-                studentNum,
-                totalCredit
-            ] = values;
-            
-            const tr = document.createElement('tr');
-            
-            // 添加行背景色的逻辑
-            const currentNum = parseInt(studentNum) || 0;
-            const maxCapacity = parseInt(maxNum) || 0;
-            
-            // 计算低人数阈值
-            let lowThreshold = maxCapacity === 70 ? 35 : (maxCapacity === 35 ? 20 : Math.floor(maxCapacity / 2));
-            
-            if (currentNum > maxCapacity) {
-                tr.style.backgroundColor = '#ffebee'; // 淡红色
-            } else if (currentNum < lowThreshold) {
-                tr.style.backgroundColor = '#e8f5e9'; // 淡绿色
-            }
-            
-            tr.innerHTML = `
-                <td>${courseCode || ''}</td>
-                <td>${courseName || ''}</td>
-                <td>${courseShortName || ''}</td>
-                <td>${courseNameEn || ''}</td>
-                <td>${lessonTaskTeam || ''}</td>
-                <td>${lessonClassShortName || ''}</td>
-                <td style="display: none;">${iClassMode || ''}</td>
-                <td>${language || ''}</td>
-                <td>${maxNum || '0'}</td>
-                <td>${studentNum || '0'}</td>
-                <td>${totalCredit || ''}</td>
-            `;
-            courseDataBody.appendChild(tr);
-        });
+        
+        // 更新显示
+        updateCourseDataDisplay(rows);
     } catch (error) {
         console.error('加载课程数据失败:', error);
         console.error('错误详情:', error.message);
     }
 }
 
+// 更新课程数据显示
+function updateCourseDataDisplay(rows) {
+    const courseDataBody = document.getElementById('courseDataBody');
+    courseDataBody.innerHTML = ''; // 清空现有内容
+
+    // 获取已选课程的课程代码（包括基础版本和iclass版本）
+    const selectedCourseCodes = selectedCourses.map(course => ({
+        code: course.lessonClassShortName,
+        baseCode: course.lessonClassShortName.replace('iclass', ''),
+        isOnline: course.isOnline
+    }));
+
+    rows.forEach(row => {
+        if (row.trim() === '') return; // 跳过空行
+        
+        // 使用正则表达式来正确分割CSV数据
+        const matches = row.match(/(?:^|,)("(?:[^"]*(?:""[^"]*)*)"|\s*[^,]*)/g);
+        if (!matches) return;
+        
+        const values = matches.map(match => {
+            match = match.startsWith(',') ? match.slice(1) : match;
+            if (match.startsWith('"') && match.endsWith('"')) {
+                match = match.slice(1, -1).replace(/""/g, '"');
+            }
+            return match.trim();
+        });
+
+        const [
+            courseCode,
+            courseName,
+            courseShortName,
+            courseNameEn,
+            lessonTaskTeam,
+            lessonClassShortName,
+            iClassMode,
+            language,
+            maxNum,
+            studentNum,
+            totalCredit
+        ] = values;
+
+        // 检查是否应该显示此课程
+        const matchingCourse = selectedCourseCodes.find(selected => {
+            if (showAllCourses) return true;
+            // 对于在线课程，匹配带iclass的课程代码
+            if (selected.isOnline) {
+                return lessonClassShortName.includes('iclass') && 
+                       lessonClassShortName.replace('iclass', '') === selected.baseCode;
+            }
+            // 对于线下课程，匹配不带iclass的课程代码
+            return !lessonClassShortName.includes('iclass') && 
+                   lessonClassShortName === selected.baseCode;
+        });
+
+        if (!showAllCourses && !matchingCourse) {
+            return;
+        }
+
+        const tr = document.createElement('tr');
+        
+        // 添加行背景色的逻辑
+        const currentNum = parseInt(studentNum) || 0;
+        const maxCapacity = parseInt(maxNum) || 0;
+        
+        // 计算低人数阈值
+        let lowThreshold = maxCapacity === 70 ? 35 : (maxCapacity === 35 ? 20 : Math.floor(maxCapacity / 2));
+        
+        if (currentNum > maxCapacity) {
+            tr.style.backgroundColor = '#ffebee'; // 淡红色
+        } else if (currentNum < lowThreshold) {
+            tr.style.backgroundColor = '#e8f5e9'; // 淡绿色
+        }
+
+        // 如果是已选课程，添加高亮效果
+        if (matchingCourse) {
+            tr.classList.add('table-active');
+        }
+        
+        tr.innerHTML = `
+            <td>${courseCode || ''}</td>
+            <td>${courseName || ''}</td>
+            <td>${courseShortName || ''}</td>
+            <td>${courseNameEn || ''}</td>
+            <td>${lessonTaskTeam || ''}</td>
+            <td>${lessonClassShortName || ''}</td>
+            <td style="display: none;">${iClassMode || ''}</td>
+            <td>${language || ''}</td>
+            <td>${maxNum || '0'}</td>
+            <td>${studentNum || '0'}</td>
+            <td>${totalCredit || ''}</td>
+        `;
+        courseDataBody.appendChild(tr);
+    });
+}
+
+// 切换显示模式
+function toggleDisplayMode() {
+    showAllCourses = !showAllCourses;
+    const toggleBtn = document.getElementById('toggleDisplayBtn');
+    toggleBtn.textContent = showAllCourses ? '显示已选' : '显示全部';
+    loadCourseData(); // 重新加载数据
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', function() {
     initCalendar();
     loadCourses();
-    loadCourseData(); // 加载课程数据
+    loadCourseData();
+
+    // 添加切换按钮事件监听
+    const toggleBtn = document.getElementById('toggleDisplayBtn');
+    toggleBtn.addEventListener('click', toggleDisplayMode);
 });
