@@ -425,6 +425,20 @@ async function loadCourseData() {
             ] = values;
             
             const tr = document.createElement('tr');
+            
+            // 添加行背景色的逻辑
+            const currentNum = parseInt(studentNum) || 0;
+            const maxCapacity = parseInt(maxNum) || 0;
+            
+            // 计算低人数阈值
+            let lowThreshold = maxCapacity === 70 ? 35 : (maxCapacity === 35 ? 20 : Math.floor(maxCapacity / 2));
+            
+            if (currentNum > maxCapacity) {
+                tr.style.backgroundColor = '#ffebee'; // 淡红色
+            } else if (currentNum < lowThreshold) {
+                tr.style.backgroundColor = '#e8f5e9'; // 淡绿色
+            }
+            
             tr.innerHTML = `
                 <td>${courseCode || ''}</td>
                 <td>${courseName || ''}</td>
